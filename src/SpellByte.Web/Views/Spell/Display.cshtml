@@ -1,0 +1,113 @@
+﻿@model SpellByte.Web.ViewModels.Spell.DisplayViewModel
+
+<div>
+    <h4>Spell</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Shape)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shape)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Domain)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Domain)
+        </dd>
+    </dl>
+
+    @foreach (var effect in Model.Effects)
+    {
+        <div class="col-lg-4">
+            <div class="card-container">
+                <div class="card">
+                    <div class="front">
+                        <div class="cover">
+                            <img src="images/rotating_card_thumb3.png" />
+                        </div>
+                        <div class="user">
+                            <img class="img-circle" src="images/rotating_card_profile.png" />
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">@effect.Name</h3>
+                                <p class="profession"></p>
+
+                                <p class="text-center">@effect.Description</p>
+                            </div>
+                            <div class="footer">
+                                <div class="rating">
+                                    <i class="fa fa-mail-forward"></i> More
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h5 class="motto">"@effect.Description"</h5>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4 class="text-center">@effect.Type</h4>
+                                <p class="text-center">@effect.Duration @effect.DurationTiming</p>
+
+                                <h4 class="text-center">@effect.Type</h4>
+                                <p class="text-center">
+                                    @switch (effect.Nature)
+                                {
+                                    case NatureTypes.Drain:
+                                    case NatureTypes.Heal:
+                                        <br /><span>@Html.DisplayFor(model => effect.Affliction)</span>
+                                        break;
+
+                                }
+                            </p>
+
+                            @foreach (var _effect in effect.Effects)
+                            {
+                                <br /><span>@Html.DisplayFor(model => _effect.Name)</span>
+                                        <br /><span>@Html.DisplayFor(model => _effect.Description)</span>
+                                        <br /><span>@Html.DisplayFor(model => _effect.Type)</span>
+                                        <br /><span>@_effect.Duration @_effect.DurationTiming</span>
+                                        <br /><span>@Html.DisplayFor(model => _effect.Nature)</span>
+                                        @switch (_effect.Nature)
+                                        {
+                                            case NatureTypes.Drain:
+                                            case NatureTypes.Heal:
+                                                <br /><span>@Html.DisplayFor(model => _effect.Affliction)</span>
+                                                break;
+
+                                        }
+                            }
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div class="social-links text-center">
+                            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                        </div>
+                    </div>
+                </div> <!-- end back panel -->
+            </div> <!-- end card -->
+        </div> <!-- end card-container -->
+    </div>
+    }
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

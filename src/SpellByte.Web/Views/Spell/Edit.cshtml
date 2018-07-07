@@ -1,0 +1,124 @@
+﻿@model SpellByte.Web.ViewModels.Spell.EditViewModel
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Edit</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Id" type="hidden"/>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Shape" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Shape"
+                        asp-items="@(Enum.GetValues(typeof(Shape))
+                        .Cast<Shape>()
+                        .Select(t => new SelectListItem
+                        {
+                            Text = t.GetAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>().Name,
+                            Value = t.ToString()
+                        }).ToList())"
+                        class="form-control"></select>
+                <span asp-validation-for="Shape" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Domain" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Domain"
+                        asp-items="@Model.Domains"
+                        class="form-control"></select>
+                <span asp-validation-for="Domain" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="EffectsList" class="col-md-2 control-label">Known Effects:</label>
+            <div class="col-md-10">
+                <select id="EffectList"
+                        asp-items="@Model.EffectList"
+                        class="form-control"></select>
+                <button id="effects-add" class="btn btn-default" type="button">Add</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Effects" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Effects"
+                        asp-items="@Model.SelectedEffects"
+                        class="form-control"></select>
+                <span asp-validation-for="Effects" class="text-danger"></span>
+                <button id="effects-remove" class="btn btn-default" type="button">Remove</button>
+                <button id="effects-remove-all" class="btn btn-default" type="button">Remove All</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Edit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('select#Effects option:selected').each(function () {
+                $(this).removeAttr('selected');
+            });
+        });
+
+        $("form").submit(function ()
+        {
+            $('select#Effects option').each(function () {
+                $(this).prop('selected', true);
+            });
+        });
+
+        $('#effects-remove').on('click', function () {
+            $('select#Effects option:selected').remove();
+        });
+
+        $('#effects-remove-all').on('click', function () {
+            $('select#Effects option').each(function () {
+                $(this).remove();
+            });
+        });
+
+        $("#effects-add").click(function () {
+            var options = $('select#EffectList option:selected').sort().clone();
+            //collect the values from selected;
+            var arr = $.map
+                (
+                $("select#EffectList option:selected"), function (n) {
+                    return n.value;
+                }
+            );
+
+            //disable elements
+            $("select#Effects option").filter(function () {
+                return $.inArray($(this).val(), arr) > -1; //if value is in the array of selected values
+            }).remove();
+
+            $('select#Effects').append(options);
+        });
+
+</script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

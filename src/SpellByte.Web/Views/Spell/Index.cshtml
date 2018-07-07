@@ -1,0 +1,31 @@
+﻿@model SpellByte.Web.ViewModels.Spell.IndexViewModel
+
+<div class="form-horizontal">
+    <h4>Spells</h4> - <a asp-action="Create">Create</a>
+    <hr />
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Shape</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var spell in Model.Spells)
+            {
+                <tr>
+                    <td>@spell.Name</td>
+                    <td>@spell.Description</td>
+                    <td>@(spell.Shape.GetAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>().Name)</td>
+                    <td>
+                        <a asp-action="Display" asp-route-id="@spell.Id">View</a> |
+                        <a asp-action="Edit" asp-route-id="@spell.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@spell.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

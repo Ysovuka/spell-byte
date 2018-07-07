@@ -1,0 +1,26 @@
+﻿@model SpellByte.Web.ViewModels.Domain.IndexViewModel
+
+<div class="form-horizontal">
+    <h4>Domains</h4> - <a asp-action="Create">Create</a>
+    <hr />
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var domain in Model.Domains)
+            {
+                <tr>
+                    <td>@domain.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@domain.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@domain.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

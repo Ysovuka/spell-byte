@@ -1,0 +1,28 @@
+﻿@model SpellByte.Web.ViewModels.Infliction.IndexViewModel
+
+<div class="form-horizontal">
+    <h4>Inflictions</h4> - <a asp-action="Create">Create</a>
+    <hr />
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var infliction in Model.Inflictions)
+            {
+                <tr>
+                    <td>@infliction.Name</td>
+                    <td>@infliction.Description</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@infliction.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@infliction.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

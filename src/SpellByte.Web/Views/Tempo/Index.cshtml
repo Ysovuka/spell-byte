@@ -1,0 +1,26 @@
+﻿@model SpellByte.Web.ViewModels.Tempo.IndexViewModel
+
+<div class="form-horizontal">
+    <h4>Tempos</h4> - <a asp-action="Create">Create</a>
+    <hr />
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tempo in Model.Tempos)
+            {
+                <tr>
+                    <td>@(tempo.Value) (@(tempo.Timing.GetAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>().Name))</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@tempo.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@tempo.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

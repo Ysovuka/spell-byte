@@ -1,0 +1,78 @@
+﻿@model SpellByte.Web.ViewModels.Spell.DeleteViewModel
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Spell</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Shape)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shape)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Domain)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Domain)
+        </dd>
+        @foreach (var effect in Model.Effects)
+        {
+            <dt>
+                Effect
+            </dt>
+            <dd>
+                <br /><span>@Html.DisplayFor(model => effect.Name)</span>
+                <br /><span>@Html.DisplayFor(model => effect.Description)</span>
+                <br /><span>@Html.DisplayFor(model => effect.Type)</span>
+                <br /><span>@effect.Duration @effect.DurationTiming</span>
+                <br /><span>@Html.DisplayFor(model => effect.Nature)</span>
+                @switch (effect.Nature)
+                {
+                    case NatureTypes.Drain:
+                    case NatureTypes.Heal:
+                        <br /><span>@Html.DisplayFor(model => effect.Affliction)</span>
+                        break;
+
+                }
+                @foreach (var _effect in effect.Effects)
+                {
+                    <br /><span>@Html.DisplayFor(model => _effect.Name)</span>
+                    <br /><span>@Html.DisplayFor(model => _effect.Description)</span>
+                    <br /><span>@Html.DisplayFor(model => _effect.Type)</span>
+                    <br /><span>@_effect.Duration @_effect.DurationTiming</span>
+                    <br /><span>@Html.DisplayFor(model => _effect.Nature)</span>
+                    @switch (_effect.Nature)
+                    {
+                        case NatureTypes.Drain:
+                        case NatureTypes.Heal:
+                            <br /><span>@Html.DisplayFor(model => _effect.Affliction)</span>
+                            break;
+
+                    }
+                }
+            </dd>
+        }
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

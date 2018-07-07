@@ -1,0 +1,221 @@
+@model SpellByte.Web.ViewModels.Effect.CreateViewModel
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Create</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Category" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Category"
+                       asp-items="@(Enum.GetValues(typeof(EffectCategory))
+                        .Cast<EffectCategory>()
+                        .Select(t => new SelectListItem
+                        {
+                            Text = t.GetAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>().Name,
+                            Value = t.ToString()
+                        }).ToList())"
+                       class="form-control"></select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Type" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Type" 
+                        asp-items="@(Enum.GetValues(typeof(EffectTypes))
+                        .Cast<EffectTypes>()
+                        .Select(t => new SelectListItem
+                        {
+                            Text = t.GetAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>().Name,
+                            Value = t.ToString()
+                        }).ToList())"
+                        class="form-control">
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+        </div>
+        <div id="effect-type" class="effect-type">
+            @(await Component.InvokeAsync<EffectTypesViewComponent>(new {  effectId = default(Guid), effectType = EffectTypes.Overtime }))
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Duration" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Duration" 
+                        asp-items="@Model.Tempos"
+                        class="form-control">
+                </select>
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CastingSpeed" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="CastingSpeed"
+                        asp-items="@Model.Tempos.Where(s => s.Text.Contains("Second/s") || s.Text.Contains("Minute/s"))"
+                        class="form-control"></select>
+                <span asp-validation-for="CastingSpeed" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="RecastSpeed" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="RecastSpeed"
+                        asp-items="@Model.Tempos.Where(s => !s.Text.Contains("Millisecond/s"))"
+                        class="form-control"></select>
+                <span asp-validation-for="RecastSpeed" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="RecoverySpeed" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="RecoverySpeed"
+                        asp-items="@Model.Tempos.Where(s => s.Text.Contains("Millisecond/s"))"
+                        class="form-control"></select>
+                <span asp-validation-for="RecoverySpeed" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Immunity" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <div class="switch">
+                    <input asp-for="Immunity" class="cmn-toggle cmn-toggle-round-flat" />
+                    <label for="Immunity"></label>
+                </div>
+                <span asp-validation-for="Immunity" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImmunityDuration" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="ImmunityDuration"
+                        asp-items="@Model.Tempos.Where(s => !s.Text.Contains("Millisecond/s"))"
+                        class="form-control"></select>
+                <span asp-validation-for="ImmunityDuration" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Nature" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Nature"
+                        asp-items="@(Enum.GetValues(typeof(NatureTypes))
+                        .Cast<NatureTypes>()
+                        .Select(t => new SelectListItem
+                        {
+                            Text = t.ToString(),
+                            Value = t.ToString()
+                        }).ToList())"
+                        class="form-control"></select>
+                <span asp-validation-for="Nature" class="text-danger"></span>
+            </div>
+        </div>
+        <div id="effect-nature" class="effect-nature">
+            @Html.Partial("~/Views/Effect/NatureTypes/Ailment.cshtml", new SpellByte.Web.ViewModels.Effect.NatureTypesViewModel())
+        </div>
+        <div class="form-group">
+            <label for="EffectsList" class="col-md-2 control-label">Known Effects:</label>
+            <div class="col-md-10">
+                <select id="EffectList"
+                        asp-items="@Model.EffectList"
+                        class="form-control"></select>
+                <button id="effects-add" class="btn btn-default" type="button">Add</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Effects" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Effects"
+                        asp-items="@Model.SelectedEffects"
+                        class="form-control"></select>
+                <button id="effects-remove" class="btn btn-default" type="button">Remove</button>
+                <button id="effects-remove-all" class="btn btn-default" type="button">Remove All</button>
+                <span asp-validation-for="Effects" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+<script>
+    $("#Nature").change(function () {
+        $.ajax({
+            url: "/Effect/Display" + $("#Nature").find(":selected").text() + "Options", context: document.body, success: function (data) {
+                $("#effect-nature").html("");
+                $("#effect-nature").html(data);
+            }
+        });
+    });
+
+    $("#Type").change(function () {
+        $.ajax({
+            url: "/Effect/Display" + $("#Type").find(":selected").text() + "Options", context: document.body, success: function (data) {
+                $("#effect-type").html("");
+                $("#effect-type").html(data);
+            }
+        });
+    });
+</script>
+<script>
+        $("form").submit(function () {
+            $('select#Effects option').each(function () {
+                $(this).prop('selected', true);
+            });
+        });
+
+        $('#effects-remove').on('click', function () {
+            $('select#Effects option:selected').remove();
+        });
+
+        $('#effects-remove-all').on('click', function () {
+            $('select#Effects option').each(function () {
+                $(this).remove();
+            });
+        });
+
+        $("#effects-add").click(function () {
+            $("#Effects").html();
+
+            var options = $('select#EffectList option:selected').sort().clone();
+            //collect the values from selected;
+            var arr = $.map
+                (
+                $("select#EffectList option:selected"), function (n) {
+                    return n.value;
+                }
+                );
+
+            //disable elements
+            $("select#Effects option").filter(function () {
+                return $.inArray($(this).val(), arr) > -1; //if value is in the array of selected values
+            }).remove();
+
+            $('select#Effects').append(options);
+        });
+</script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

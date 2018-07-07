@@ -1,0 +1,35 @@
+﻿@model SpellByte.Web.ViewModels.Effect.EffectTypesViewModel
+
+<div class="form-group">
+    <label asp-for="DurationTick" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <select asp-for="DurationTick"
+                asp-items="@Model.Tempos"
+                class="form-control"></select>
+        <span asp-validation-for="DurationTick" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label asp-for="DamagePerTick" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="DamagePerTick" class="form-control" type="number" />
+        <span asp-validation-for="DamagePerTick" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label asp-for="DamagePerTickStyle" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <select asp-for="DamagePerTickStyle"
+                asp-items="@(Enum.GetValues(typeof(DamageStyles))
+                            .Cast<DamageStyles>()
+                            .Select(t => new SelectListItem
+                            {
+                                Text = t.GetAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>().Name,
+                                Value = t.ToString()
+                            }).ToList())"
+                class="form-control"></select>
+        <span asp-validation-for="DamagePerTickStyle" class="text-danger"></span>
+    </div>
+</div>

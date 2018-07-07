@@ -1,0 +1,26 @@
+﻿@model SpellByte.Web.ViewModels.Nature.IndexViewModel
+
+<div class="form-horizontal">
+    <h4>Natures</h4> - <a asp-action="Create">Create</a>
+    <hr />
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var nature in Model.Natures)
+            {
+                <tr>
+                    <td>@nature.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@nature.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@nature.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

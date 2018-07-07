@@ -1,0 +1,25 @@
+﻿@model SpellByte.Web.ViewModels.Effect.EffectTypesViewModel
+
+<div class="form-group">
+    <label asp-for="Trigger" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <select asp-for="Trigger"
+                asp-items="@(Enum.GetValues(typeof(TriggerTypes))
+                            .Cast<TriggerTypes>()
+                            .Select(t => new SelectListItem
+                            {
+                                Text = t.GetAttribute<System.ComponentModel.DataAnnotations.DisplayAttribute>().Name,
+                                Value = t.ToString()
+                            }).ToList())"
+                class="form-control"></select>
+        <span asp-validation-for="Trigger" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label asp-for="TriggerCount" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="TriggerCount" class="form-control" type="number" />
+        <span asp-validation-for="TriggerCount" class="text-danger"></span>
+    </div>
+</div>
